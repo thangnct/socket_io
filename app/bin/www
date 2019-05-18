@@ -34,7 +34,8 @@ io.on("connection", (socket) => {
 
   socket.on('chat message', (data) => {
     console.log('message: ' + data);
-    io.emit('chat message', data);
+    io.emit('chat message', data); //nếu sử dụng io thì sẽ phát sự kiện trên tất cả những cái đang lắng nghe
+    // socket.emit("chat message", data); //chỉ hoạt động trên máy riêng cá nhân thôi
   });
 })
 
