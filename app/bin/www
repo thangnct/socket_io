@@ -7,12 +7,13 @@
 var app = require('../app');
 var debug = require('debug')('app:server');
 var http = require('http');
+const config = require("../config");
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || config.server.port);
 app.set('port', port);
 
 /**
@@ -21,9 +22,28 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+//socket listening
+
+const io = require("socket.io")(server);
+io.on("connection", (socket) => {
+  console.log("have user connect");
+
+  socket.on("disconnect", () => {
+    console.log("user disconnect");
+  })
+
+  socket.on('chat message', (data) => {
+    console.log('message: ' + data);
+    io.emit('chat message', data);
+  });
+})
+
+
+
 /**
  * Listen on provided port, on all network interfaces.
  */
+//socket listten event connected 
 
 server.listen(port);
 server.on('error', onError);
